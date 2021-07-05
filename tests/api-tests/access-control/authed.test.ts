@@ -156,28 +156,24 @@ describe('Authed', () => {
                 expect(item.id).toEqual(validId);
               });
 
-              test(`single not allowed: ${JSON.stringify(access)}`, async () => {
-                const { itemQueryName } = context.gqlNames(listKey);
-                const invalidId = items[listKey].find(({ name }) => name !== 'Hello')?.id;
-                const query = `query { ${itemQueryName}(where: { id: "${invalidId}" }) { id } }`;
-                const { data, errors } = await context.graphql.raw({ query });
-                if (mode === 'imperative') {
-                  // Imperative should work
-                  expect(errors).toBe(undefined);
-                  expect(data?.[itemQueryName]).not.toBe(null);
-                  expect(data?.[itemQueryName].id).toEqual(invalidId);
-                } else {
-                  // but declarative should not
-                  expectNoAccess(data, errors, itemQueryName);
-                }
-              });
+            test(`single not allowed: ${JSON.stringify(access)}`, async () => {
+              const invalidId = items[listKey].find(({ name }) => name !== 'Hello')?.id;
+              const item = await context.lists[listKey].findOne({ where: { id: invalidId } });
+              if (mode === 'imperative') {
+                // Imperative should work
+                expect(item).toEqual({ id: invalidId });
+              } else {
+                // but declarative should not
+                expect(item).toEqual(null);
+              }
+            });
 
-              test(`single not existing: ${JSON.stringify(access)}`, async () => {
-                const { itemQueryName } = context.gqlNames(listKey);
-                const query = `query { ${itemQueryName}(where: { id: "${FAKE_ID[provider]}" }) { id } }`;
-                const { data, errors } = await context.graphql.raw({ query });
-                expectNoAccess(data, errors, itemQueryName);
+            test(`single not existing: ${JSON.stringify(access)}`, async () => {
+              const item = await context.lists[listKey].findOne({
+                where: { id: FAKE_ID[provider] },
               });
+              expect(item).toEqual(null);
+            });
 
               test(`multiple not existing: ${JSON.stringify(access)}`, async () => {
                 const _items = await context.lists[listKey].findMany({
