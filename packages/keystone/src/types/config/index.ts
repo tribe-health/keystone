@@ -138,6 +138,7 @@ export type ServerConfig = {
 export type GraphQLConfig = {
   // The path of the GraphQL API endpoint. Default: '/api/graphql'.
   path?: string;
+  cors?: CorsOptions;
   queryLimits?: {
     maxTotalResults?: number;
   };

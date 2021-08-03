@@ -134,7 +134,7 @@ export const expectExtensionError = (
         extensions: {
           code: 'INTERNAL_SERVER_ERROR',
           ...(expectException
-            ? { exception: { debug, stacktrace: expect.arrayContaining(stacktrace) } }
+            ? { exception: { stacktrace: expect.arrayContaining(stacktrace) } }
             : {}),
           ...(expectDebug ? { debug } : {}),
         },

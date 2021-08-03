@@ -9,7 +9,7 @@ import { addHealthCheck } from './addHealthCheck';
 
 const DEFAULT_MAX_FILE_SIZE = 200 * 1024 * 1024; // 200 MiB
 
-const addApolloServer = ({
+const addApolloServer = async ({
   server,
   config,
   graphQLSchema,
@@ -33,10 +33,13 @@ const addApolloServer = ({
 
   const maxFileSize = config.server?.maxFileSize || DEFAULT_MAX_FILE_SIZE;
   server.use(graphqlUploadExpress({ maxFileSize }));
+  // FIXME: Support custom API path via config.graphql.path.
+  // Note: Core keystone uses '/admin/api' as the default.
+  await apolloServer.start();
   apolloServer.applyMiddleware({
     app: server,
     path: config.graphql?.path || '/api/graphql',
-    cors: false,
+    cors: config.graphql?.cors || { origin: 'https://studio.apollographql.com', credentials: true },
   });
 };
 
@@ -63,7 +66,7 @@ export const createExpressServer = async (
   addHealthCheck({ config, server });
 
   if (isVerbose) console.log('✨ Preparing GraphQL Server');
-  addApolloServer({
+  await addApolloServer({
     server,
     config,
     graphQLSchema,
