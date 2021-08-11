@@ -22,7 +22,7 @@ const addApolloServer = ({
   graphQLSchema: GraphQLSchema;
   createContext: CreateContext;
   sessionStrategy?: SessionStrategy<any>;
-  graphqlConfig?: GraphQLConfig;
+  graphqlConfig?: GraphQLConfig<any>;
 }) => {
   const apolloServer = createApolloServerExpress({
     graphQLSchema,
