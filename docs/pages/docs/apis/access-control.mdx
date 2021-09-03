@@ -37,9 +37,9 @@ List-level access control can be specified in three ways.
 - `item` access control lets you write a function which inspects the provided input data and the existing object (if it exists)
   and make a decision based on this extra data.
 
-If access is **denied** due to any of the access control methods, the following responses will be returned from the GraphQL API:
+!> **Access denied:** **Mutations** return `null` data with an access denied error. **Queries** never return access denied errors, and instead treat items as if they didn't exist.
 
-!> tl;dr - **Mutations** return `null` data with an access denied error. **Queries** never return access denied errors, and instead treat items as if they didn't exist.
+If access is **denied** due to any of the access control methods, the following responses will be returned from the GraphQL API:
 
 - **Mutations**
   - **Single** operations return `null` and an access denied error.
