@@ -81,8 +81,8 @@ It does not prevent a user **reading** the data returned by the mutation operati
 
 Filter-level access control lets you control which operations can be performed by providing a function which returns a GraphQL filter.
 
-- For **mutations**, access will be denied if the item being operated on doesn't match the filter.
-- For **queries**, the access control filter will be combined with the provided query filter and only items which match both filters will be returned.
+- For **mutations**, the access control filter will be combined with the unique identifier provided to the operation, and access will be denied if no item is found with this combined filter.
+- For **queries**, the access control filter will be combined with the query filter and only items which match both filters will be returned.
 
 In general, the filter access control functions will return GraphQL filters.
 They can also return boolean values `true` or `false` to match or exclude all items.
@@ -159,7 +159,7 @@ List-level access control functions are passed a collection of arguments which c
 | `listKey`       | The key of the list being operated on.                                                                        |
 | `operation`     | The operation being performed (`'query'`, `'create'`, `'update'`, `'delete'`).                                |
 | `originalInput` | For `create` and `update` operations, this is the value of `data` passed into the mutation. (Item level only) |
-| `item`          | The item being updated/deleted in `update` and `delete` operations. (Item level only)                         |
+| `item`          | The existing item being updated/deleted in `update` and `delete` operations. (Item level only)                |
 
 ## Field Access Control
 
@@ -216,6 +216,6 @@ Field-level access control functions are passed a collection of arguments which 
 | `fieldKey`      | The key of the field being operated on.                                                     |
 | `operation`     | The operation being performed (`'read'`, `'create'`, `'update'`).                           |
 | `originalInput` | For `create` and `update` operations, this is the value of `data` passed into the mutation. |
-| `item`          | The item being read/updated in `read` and `update` operations.                              |
+| `item`          | The existing item being read/updated in `read` and `update` operations.                     |
 
 export default ({ children }) => <Markdown description="Complete reference docs for Keystone’s Access Control API. Configure who can read, create, update, and delete items in your Keystone system.">{children}</Markdown>;
