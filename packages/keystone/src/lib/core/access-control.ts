@@ -25,7 +25,19 @@ export async function checkOperationAccess(
   // Check the mutation access
   const access = list.access.operation[operation];
   // @ts-ignore
-  return !!(await access(args));
+  const result = await access(args);
+
+  const resultType = typeof result;
+
+  // It's important that we don't cast objects to truthy values, as there's a strong chance that the user
+  // has accidentally tried to return a filter.
+  if (resultType !== 'boolean') {
+    throw new Error(
+      `Must return a Boolean from ${args.listKey}.access.operation.${args.operation}(). Got ${resultType}`
+    );
+  }
+
+  return result;
 }
 
 export async function getAccessFilters(

@@ -45,7 +45,18 @@ export async function getAccessControlledItemForDelete(
   const args = { operation, session: context.session, listKey: list.listKey, context, item };
 
   // List level 'item' access control
-  if (!(await access(args))) {
+  const result = await access(args);
+  const resultType = typeof result;
+
+  // It's important that we don't cast objects to truthy values, as there's a strong chance that the user
+  // has accidentally tried to return a filter.
+  if (resultType !== 'boolean') {
+    throw new Error(
+      `Must return a Boolean from ${args.listKey}.access.item.${operation}(). Got ${resultType}`
+    );
+  }
+
+  if (!result) {
     throw accessDeniedError();
   }
 
@@ -77,7 +88,18 @@ export async function getAccessControlledItemForUpdate(
   };
 
   // List level 'item' access control
-  if (!(await access(args))) {
+  const result = await access(args);
+  const resultType = typeof result;
+
+  // It's important that we don't cast objects to truthy values, as there's a strong chance that the user
+  // has accidentally tried to return a filter.
+  if (resultType !== 'boolean') {
+    throw new Error(
+      `Must return a Boolean from ${args.listKey}.access.item.${operation}(). Got ${resultType}`
+    );
+  }
+
+  if (!result) {
     throw accessDeniedError();
   }
 
@@ -116,7 +138,18 @@ export async function applyAccessControlForCreate(
   };
 
   // List level 'item' access control
-  if (!(await access(args))) {
+  const result = await access(args);
+  const resultType = typeof result;
+
+  // It's important that we don't cast objects to truthy values, as there's a strong chance that the user
+  // has accidentally tried to return a filter.
+  if (resultType !== 'boolean') {
+    throw new Error(
+      `Must return a Boolean from ${args.listKey}.access.item.${operation}(). Got ${resultType}`
+    );
+  }
+
+  if (!result) {
     throw accessDeniedError();
   }
 
