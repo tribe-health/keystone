@@ -29,7 +29,7 @@ Keystone lets you apply access control on a per-list basis.
 By default it allows all operations for all users.
 Access control is applied to the generated CRUD (**c**reate, **r**ead, **u**pdate, **d**elete) operations and mutations in the [GraphQL API](./graphql), and is applied before any [hooks](./hooks) are executed.
 
-List-level access control can be specified in three ways, of increasing power.
+List-level access control can be specified in three ways.
 
 - `operation` access control lets you check the information in the `context` and `session` objects to decide if the
   user is allowed to access the list.
@@ -136,11 +136,6 @@ import { checkbox } from '@keystone-next/keystone/fields';
 export default config({
   lists: createSchema({
     ListKey: list({
-      fields: {
-        isReadable: checkbox(),
-        isUpdatable: checkbox(),
-        isDeletable: checkbox(),
-      }
       access: {
         item: {
           create: ({ session, context, listKey, operation, originalInput }) => true,
