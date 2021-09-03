@@ -150,6 +150,9 @@ export default config({
 });
 ```
 
+?> Item-level access control is not available for `query` operations.
+Applying access control after fetching items would lead to inconsistent pagination behaviour and incorrect `count` results.
+
 ### Function Arguments
 
 List-level access control functions are passed a collection of arguments which can be used to determine whether the operation is allowed.
