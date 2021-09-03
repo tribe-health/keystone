@@ -138,6 +138,8 @@ export type ServerConfig = {
 export type GraphQLConfig = {
   // The path of the GraphQL API endpoint. Default: '/api/graphql'.
   path?: string;
+  // The CORS configuration to use on the GraphQL API endpoint.
+  // Default: { origin: 'https://studio.apollographql.com', credentials: true }
   cors?: CorsOptions;
   queryLimits?: {
     maxTotalResults?: number;
